@@ -85,6 +85,26 @@ docker compose up --build
 
 ---
 
+# 📸 Application Screenshots
+
+## Status Endpoint
+
+![Status API](screenshot/status.png)
+
+---
+
+## History Endpoint
+
+![History API](screenshot/history.png)
+
+---
+
+## Docker Containers
+
+![Docker Containers](screenshot/code.png)
+
+---
+
 # 🧪 Persistence Test
 
 To verify Docker volume persistence:
@@ -156,4 +176,4 @@ Through this project, I learned:
 
 # 📜 License
 
-This project is created for learning and DevOps practice purposes.
+This project is created for learning and DevOps practice purpoises.
