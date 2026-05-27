@@ -7,15 +7,23 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # --- Configuration from Environment Variables ---
-DB_HOST = os.getenv('DB_HOST', 'db')
-DB_NAME = os.getenv('DB_NAME', 'health_db')
-DB_USER = os.getenv('DB_USER', 'admin')
-DB_PASS = os.getenv('DB_PASS', 'secret')
+# --- Railway PostgreSQL Environment Variables ---
+DB_HOST = os.getenv('PGHOST')
+DB_NAME = os.getenv('PGDATABASE')
+DB_USER = os.getenv('PGUSER')
+DB_PASS = os.getenv('PGPASSWORD')
+DB_PORT = os.getenv('PGPORT')
 
 def init_db():
     """Ensure the table exists for our metrics."""
     try:
-        conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
+        conn = psycopg2.connect(
+    host=DB_HOST,
+    database=DB_NAME,
+    user=DB_USER,
+    password=DB_PASS,
+    port=DB_PORT
+)
         cur = conn.cursor()
         cur.execute('''
             CREATE TABLE IF NOT EXISTS system_stats (
@@ -50,7 +58,13 @@ def status():
     ram = psutil.virtual_memory().percent
     
     try:
-        conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
+        conn = psycopg2.connect(
+    host=DB_HOST,
+    database=DB_NAME,
+    user=DB_USER,
+    password=DB_PASS,
+    port=DB_PORT
+)
         cur = conn.cursor()
         cur.execute('INSERT INTO system_stats (cpu_percent, ram_percent) VALUES (%s, %s)', (cpu, ram))
         conn.commit()
@@ -70,7 +84,13 @@ def status():
 def history():
     """Fetches the last 10 records from the database."""
     try:
-        conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
+        conn = psycopg2.connect(
+    host=DB_HOST,
+    database=DB_NAME,
+    user=DB_USER,
+    password=DB_PASS,
+    port=DB_PORT
+)
         cur = conn.cursor()
         cur.execute('SELECT cpu_percent, ram_percent, timestamp FROM system_stats ORDER BY timestamp DESC LIMIT 10;')
         rows = cur.fetchall()
@@ -91,4 +111,5 @@ def history():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0', port=8080)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
