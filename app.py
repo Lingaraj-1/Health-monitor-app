@@ -15,30 +15,40 @@ DB_PASS = os.getenv('PGPASSWORD')
 DB_PORT = os.getenv('PGPORT')
 
 def init_db():
-    """Ensure the table exists for our metrics."""
+    """Ensure table exists"""
     try:
         conn = psycopg2.connect(
-    host=DB_HOST,
-    database=DB_NAME,
-    user=DB_USER,
-    password=DB_PASS,
-    port=DB_PORT
-)
+            host=DB_HOST,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS,
+            port=DB_PORT
+        )
         cur = conn.cursor()
-        cur.execute('''
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS system_stats (
                 id SERIAL PRIMARY KEY,
                 cpu_percent FLOAT,
                 ram_percent FLOAT,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        ''')
+        """)
         conn.commit()
         cur.close()
         conn.close()
-        print("Database initialized successfully.")
+        print("Database initialized successfully")
     except Exception as e:
-        print(f"Waiting for DB... {e}")
+        print("DB init error:", e)
+
+def safe_init():
+    try:
+        if DB_HOST:
+            time.sleep(3)
+            init_db()
+    except Exception as e:
+        print("Skipping DB init:", e)
+
+safe_init()
 
 @app.route('/')
 def home():
