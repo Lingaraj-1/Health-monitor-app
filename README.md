@@ -1,62 +1,159 @@
-# 📊 System Health Monitor API 
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![PostgreSQL](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+# 📊 Dockerized System Health Monitor API
 
-A lightweight *Multi-Tier* application
+A lightweight multi-container monitoring application built using Flask, PostgreSQL, and Docker Compose.
 
----
-```Markdown
-docker pulls (https://hub.docker.com/repository/docker/aliyafirdous22/health-monitor/general)
-```
-## 🏗️ Project Architecture
-This project demonstrates a production-grade containerization strategy:
-* *App Tier:* Flask API capturing real-time CPU/RAM metrics using psutil.
-* *Database Tier:* PostgreSQL 15-Alpine for persistent data logging.
-* *Optimized Build:* Multi-stage Dockerfile to reduce image size and improve security.
+This project was implemented as part of my DevOps learning journey to understand:
+- Docker containerization
+- Multi-container architecture
+- Persistent storage using Docker volumes
+- Flask API development
+- PostgreSQL integration
+- Docker Compose orchestration
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Tech Stack
 
-### 1. Prerequisites
-* Python 3.11 (if running locally).
+- Python 3.11
+- Flask
+- PostgreSQL 15
+- Docker
+- Docker Compose
+- psutil
 
-### 2. Build and Launch
-Run the following command in the root directory:
+---
+
+# 🏗️ Project Architecture
+
+The application follows a simple two-tier architecture:
+
+## Application Tier
+- Flask-based REST API
+- Captures real-time CPU and memory usage
+- Uses `psutil` for system metrics collection
+
+## Database Tier
+- PostgreSQL container for persistent data storage
+- Docker volumes used to retain data even after container restart
+
+## Containerization
+- Multi-stage Dockerfile used for optimized image size
+- Lightweight Alpine Linux base image
+- Docker Compose used for orchestration and networking
+
+---
+
+# 📂 Project Structure
+
 ```bash
-docker-compose up --build
+health-monitor-app/
+├── app.py                # Flask application
+├── requirements.txt      # Python dependencies
+├── Dockerfile            # Multi-stage Docker build
+├── docker-compose.yml    # Multi-container orchestration
+└── README.md
 ```
 
-## API Endpoints
-Route Method Description
-/ GET Home: Check if the API is alive.
-/status GET Record: Captures CPU/RAM and saves to PostgreSQL.
-/history GET History: View the last 10 records from the DB.
+---
 
-The "Persistence Test"
-​To verify your DevOps setup is correct:
+# ⚙️ Getting Started
 
-​Open http://localhost:8080/status (Refresh a few times).
+## 1. Clone Repository
 
-​Check http://localhost:8080/history to see your data.
+```bash
+git clone <https://github.com/Lingaraj-1/Health-monitor-app.git>
+cd health-monitor-app
+```
 
-​Run docker-compose down.
+---
 
-​Run docker-compose up again.
+## 2. Build and Start Containers
 
-​Refresh /history. If the data is still there, your volumes are working!
+```bash
+docker compose up --build
+```
 
+---
 
-## ​📦 Project Structure
+# 🌐 API Endpoints
 
+| Endpoint | Method | Description |
+|----------|---------|-------------|
+| `/` | GET | Health check endpoint |
+| `/status` | GET | Captures current CPU/RAM usage and stores in PostgreSQL |
+| `/history` | GET | Displays previously stored monitoring records |
 
-health-monitor-app/
-├── app.py              # Flask Application logic
-├── requirements.txt    # Python dependencies
-├── Dockerfile          # Multi-stage build instructions
-└── docker-compose.yml  # Orchestration & Volumes
+---
 
+# 🧪 Persistence Test
 
+To verify Docker volume persistence:
 
+1. Open:
+
+```bash
+http://localhost:8080/status
+```
+
+Refresh multiple times.
+
+2. Check stored history:
+
+```bash
+http://localhost:8080/history
+```
+
+3. Stop containers:
+
+```bash
+docker compose down
+```
+
+4. Restart again:
+
+```bash
+docker compose up
+```
+
+5. Reopen `/history`
+
+If previous records still exist, Docker volumes are working correctly.
+
+---
+
+# 🐳 Docker Concepts Used
+
+- Multi-stage Docker builds
+- Docker networking
+- Docker volumes
+- Environment variables
+- Container orchestration with Docker Compose
+- Persistent database storage
+
+---
+
+# 📌 Learning Outcomes
+
+Through this project, I learned:
+- Building Docker images
+- Managing multi-container applications
+- Connecting Flask with PostgreSQL
+- Working with Docker volumes and networks
+- Container lifecycle management
+- Basic DevOps project structuring
+
+---
+
+# ▶️ Future Improvements
+
+- Add GitHub Actions CI/CD pipeline
+- Deploy application on AWS EC2
+- Add Nginx reverse proxy
+- Add Prometheus and Grafana monitoring
+- Add health checks and logging
+
+---
+
+# 📜 License
+
+This project is created for learning and DevOps practice purposes.
